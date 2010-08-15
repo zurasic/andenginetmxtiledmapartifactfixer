@@ -136,15 +136,15 @@ public class TMXTiledMapArtifactFixer {
 		return new File(pSourceFile.getParentFile() + File.separator + "fixed_" + pSourceFile.getName());
 	}
 
-	static int determineCount(final int pExtent, final int pTileExtent, final int pMargin, final int pSpacing) {
+	static int determineCount(final int pTotalExtent, final int pTileExtent, final int pMargin, final int pSpacing) {
 		int count = 0;
-		int remainignExtent = pExtent;
+		int remainingExtent = pTotalExtent;
 
-		remainignExtent -= pMargin * 2;
+		remainingExtent -= pMargin * 2;
 
-		while(remainignExtent > 0) {
-			remainignExtent -= pTileExtent;
-			remainignExtent -= pSpacing;
+		while(remainingExtent > 0) {
+			remainingExtent -= pTileExtent;
+			remainingExtent -= pSpacing;
 			count++;
 		}
 
