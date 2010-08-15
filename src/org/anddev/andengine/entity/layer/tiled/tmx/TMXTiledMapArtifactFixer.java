@@ -33,7 +33,8 @@ public class TMXTiledMapArtifactFixer {
 	public static void main(final String[] args) throws ParseException {
 		final Options options = new Options();
 
-		options.addOption("f", "file", true, "Print help for this application");
+		options.addOption("f", "file", true, "Filename of the tileset to fix.");
+		options.addOption("o", "out", true, "Filename of the fixed tileset.");
 		options.addOption("m", true, "Margin of the existing tileset.");
 		options.addOption("s", true, "Spacing of the existing tileset.");
 		options.addOption("w", true, "Width of a tile.");
@@ -49,12 +50,13 @@ public class TMXTiledMapArtifactFixer {
 				f.printHelp("TMXTiledMapArtifactFixer-Help", options);
 			} else {
 				final String filename = cl.getOptionValue("f");
+				final String outFilename = cl.getOptionValue("o");
 				final int tileWidth = Integer.parseInt(cl.getOptionValue("w"));
 				final int tileHeight = Integer.parseInt(cl.getOptionValue("h"));
 				final int margin = Integer.parseInt(cl.getOptionValue("m", "0"));
 				final int spacing = Integer.parseInt(cl.getOptionValue("s", "0"));
 
-				fix(filename, tileWidth, tileHeight, margin, spacing);
+				fix(filename, outFilename, tileWidth, tileHeight, margin, spacing);
 			}
 		} catch (final Throwable t) {
 			final HelpFormatter f = new HelpFormatter();
@@ -70,12 +72,12 @@ public class TMXTiledMapArtifactFixer {
 	// Methods for/from SuperClass/Interfaces
 	// ===========================================================
 
-	private static void fix(final String pFilename, final int pTileWidth, final int pTileHeight, final int pMargin, final int pSpacing) throws IOException {
+	private static void fix(final String pFilename, final String pOutputFilename, final int pTileWidth, final int pTileHeight, final int pMargin, final int pSpacing) throws IOException {
 		final File sourceFile = new File(pFilename);
 		if(!sourceFile.isFile()) {
 			throw new IllegalArgumentException("Not a file: " + pFilename);
 		}
-		System.out.print("Fixing");
+		System.out.println("Fixing:");
 
 		final BufferedImage img = ImageIO.read(sourceFile);
 
@@ -121,10 +123,12 @@ public class TMXTiledMapArtifactFixer {
 				/* Draw the tile where it actually belongs. */
 				g.drawImage(img, dx, dy, dx2, dy2, sx, sy, sx2, sy2, null);
 				
-				System.out.print(".");
+				System.out.print("x");
 			}
+			System.out.print("\n");
 		}
-		ImageIO.write(out, "png", generateOutputFile(sourceFile));
+		System.out.print("Saving... ");
+		ImageIO.write(out, "png", pOutputFilename != null ? new File(pOutputFilename) : generateOutputFile(sourceFile));
 		System.out.print("done.");
 	}
 
