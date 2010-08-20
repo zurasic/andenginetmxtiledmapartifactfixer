@@ -57,8 +57,15 @@ public class TMXTiledMapArtifactFixer {
 				final int spacing = Integer.parseInt(cl.getOptionValue("s", "0"));
 
 				fix(filename, outFilename, tileWidth, tileHeight, margin, spacing);
+
+				System.out.println("When using the fixed tileset, you'll now have to change:");
+				System.out.println("\t ...  spacing=\"" + spacing + "\" margin=\"" + margin + "\">");
+				System.out.println("to:");
+				System.out.println("\t ...  spacing=\"" + (spacing + 2) + "\" margin=\"" + (margin + 1) + "\">");
+				System.out.println("!!!!");
 			}
 		} catch (final Throwable t) {
+			t.printStackTrace();
 			final HelpFormatter f = new HelpFormatter();
 			f.printHelp("TMXTiledMapArtifactFixer", options);
 		}
@@ -129,7 +136,7 @@ public class TMXTiledMapArtifactFixer {
 		}
 		System.out.print("Saving... ");
 		ImageIO.write(out, "png", pOutputFilename != null ? new File(pOutputFilename) : generateOutputFile(sourceFile));
-		System.out.print("done.");
+		System.out.println("done.");
 	}
 
 	static File generateOutputFile(final File pSourceFile) {
